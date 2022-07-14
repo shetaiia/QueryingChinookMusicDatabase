@@ -1,0 +1,69 @@
+/*What are the top 10 genres with the most artists?*/
+SELECT
+  Genre.Name AS Genre,
+  COUNT(DISTINCT (ArtistId)) AS NumOfArtists
+FROM Track
+JOIN Genre
+  ON Track.GenreId = Genre.GenreId
+JOIN Album
+  ON Album.AlbumId = Track.AlbumId
+GROUP BY 1
+ORDER BY 2 DESC
+LIMIT 10;
+
+
+
+/*What is the highest number of sales in each country?*/
+SELECT
+  Customer.Country,
+  SUM(Invoice.Total) AS TotalInUSD
+FROM Customer
+JOIN Invoice
+  ON Customer.CustomerId = Invoice.CustomerId
+GROUP BY 1
+ORDER BY 2 DESC
+LIMIT 10;
+
+
+/*Which genre has the most purchases*/
+SELECT
+  Genre.Name AS Genre,
+  SUM(InvoiceLine.Quantity) AS NumOfPurchases
+FROM Track
+JOIN Genre
+  ON Genre.GenreId = Track.GenreId
+JOIN InvoiceLine
+  ON InvoiceLine.TrackId = Track.TrackId
+GROUP BY 1
+ORDER BY 2 DESC;
+
+
+
+/*Which Track is the most purchased (Since all the purchased Quantities per invoice = 1)*/
+SELECT
+  Track.Name AS Track,
+  SUM(InvoiceLine.Quantity) AS NumOfPurchases
+FROM Invoice
+JOIN InvoiceLine
+  ON Invoice.InvoiceId = InvoiceLine.InvoiceId
+JOIN Track
+  ON InvoiceLine.TrackId = Track.TrackId
+GROUP BY 1
+ORDER BY 2 DESC
+LIMIT 25;
+   
+
+
+/*Which artist has the most releases*/
+SELECT
+  Artist.Name AS Artist,
+  SUM(DISTINCT (TrackId)) AS NumOfRealeses
+FROM Album
+JOIN Artist
+  ON Artist.ArtistId = Album.AlbumId
+JOIN Track
+  ON Track.AlbumId = Album.AlbumId
+GROUP BY 1
+ORDER BY 2 DESC
+LIMIT 50;
+
